@@ -3,12 +3,12 @@ source "${HOME}/.commonrc"
 #   Change Prompt
 #   ------------------------------------------------------------
     export PS1="\[\e[0;32m\]\n# \u@\h \[\e[1;33m\] \w\[\e[0m\]> "
-    #n nouvelle ligne
-    #u nom d'utilisateur
-    #h nom de la machine
-    #w chemin complet du repertoire de travail
+    #n new ligne
+    #u user name
+    #h computer name
+    #w working path
 
-    #PS2 permet de modifier l'invite de continuation
+    #PS2 the secondary prompt string.  The default is ``> ''.
     #export PS2="| => "
 
     export CLICOLOR=1

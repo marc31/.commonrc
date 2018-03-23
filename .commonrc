@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #  ---------------------------------------------------------------------------
+#  https://github.com/marc31/bashrc.git
 #
 #  Description:  This file holds is source both by .bashrc and .zshrc
 #                I use it for commun things

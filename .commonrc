@@ -143,7 +143,7 @@
 		  local msg="$1" 
 		  local def_choice=$2
 		  shift 2
-		  local choices=($@)
+		  local choices=("$@")
 		  local prompt=""
 		  BOTASK_ANSWER="$def_choice"             #XXX: ACCESS TO USER'S CHOICE
 		  for c in "$@"; do

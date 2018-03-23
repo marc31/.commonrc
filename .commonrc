@@ -26,7 +26,7 @@
 
 	#	Source private part
 	#   ------------------------------------------------------------
-		source "$HOME/.privaterc"
+		if [ -f $HOME/.privaterc" ]; then source "$HOME/.privaterc"
 
 
 	#   Set Paths

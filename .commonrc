@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 #  ---------------------------------------------------------------------------
@@ -31,9 +30,9 @@
 
 	#   Set Paths
 	#   ------------------------------------------------------------
-	    PATH="$PATH:/usr/local/bin/:~/Documents/web/script/freshdrup"
-        PATH="$PATH:/Applications/MAMP/Library/bin:~/.composer/vendor/bin"
-        PATH="$PATH:/Applications/MAMP/bin/php/php7.0.12/bin"
+	    	PATH="$PATH:/usr/local/bin/:~/Documents/web/script/freshdrup"
+        	PATH="$PATH:/Applications/MAMP/Library/bin:~/.composer/vendor/bin"
+        	PATH="$PATH:/Applications/MAMP/bin/php/php7.0.12/bin"
 		PATH="$PATH:$HOME/.yarn/bin"
 		PATH="$PATH:/Library/Frameworks/Python.framework/Versions/2.7/bin"
 		export PATH
@@ -446,11 +445,11 @@ EOT
 #   9. WEB DEVELOPMENT
 #   ---------------------------------------
 	hostsfile='/etc/hosts'
-    alias hosts='sudo ${EDITORGUI} ${hostsfile}'
-    vhostsfile='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf'
-    alias vhosts='sudo ${EDITORGUI} ${vhostsfile}'
-    vhostssslfile='/Applications/MAMP/conf/apache/extra/httpd-ssl.conf'
-    alias vhostsssl='sudo ${EDITORGUI} ${vhostssslfile}'
+    	alias hosts='sudo ${EDITORGUI} ${hostsfile}'
+    	vhostsfile='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf'
+    	alias vhosts='sudo ${EDITORGUI} ${vhostsfile}'
+    	vhostssslfile='/Applications/MAMP/conf/apache/extra/httpd-ssl.conf'
+    	alias vhostsssl='sudo ${EDITORGUI} ${vhostssslfile}'
 
 	httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
 
@@ -459,7 +458,7 @@ EOT
     	httpDebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
 
 
-    wwwdir=/Applications/MAMP/htdocs
+    	wwwdir=/Applications/MAMP/htdocs
 	alias cdroot="cd ${wwwdir}"
 	alias cdweb="cd ~/Documents/web"
 
@@ -756,7 +755,7 @@ EOT
 	# 	set -e
 	# 	cut on error
 	#	if [[ $? -ne 0 ]] ; then
-    #		exit 1
+    	#		exit 1
 	#	fi
 	# 
 	#	https://stackoverflow.com/questions/1378274/in-a-bash-script-how-can-i-exit-the-entire-script-if-a-certain-condition-occurs

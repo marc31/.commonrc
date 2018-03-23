@@ -318,7 +318,7 @@
 	            *.zip)       unzip $1       ;;
 	            *.Z)         uncompress $1  ;;
 	            *.7z)        7z x $1        ;;
-	            *)     echo "'$1' cannot be extracted via extract()" ;;
+	            *)     echo "'$1' cannot be extracted via extract" ;;
 	             esac
 	         else
 	             echo "'$1' is not a valid file"
@@ -648,11 +648,11 @@ EOT
 			# cd ~
 
 			# # generate a private key (will request a password twice)
-			# say_blue "generate a private key (will request a password twice)"
+			# say_blue 'generate a private key (will request a password twice)'
 			# openssl genrsa -des3 -out ${keyname}.key 2048
 
 			# # generate certificate signing request (same password as above)
-			# say_blue "generate certificate signing request (same password as above)"
+			# say_blue 'generate certificate signing request (same password as above)'
 			# openssl req -sha256 -new -key ${keyname}.key -out ${keyname}.csr -config <(
 			# cat <<-EOF
 			# [req]
@@ -684,23 +684,23 @@ EOT
 			# )
 
 			# # generate the certificate
-			# say_blue "generate the certificate"
+			# say_blue 'generate the certificate'
 			# openssl x509 -req -days 365 -in ${keyname}.csr -signkey ${keyname}.key -out ${keyname}.crt
 
 			# # remove the password from the server key
-			# say_blue "remove the password from the server key"
+			# say_blue 'remove the password from the server key'
 			# cp ${keyname}.key ${keyname}.tmp
 			# openssl rsa -in ${keyname}.tmp -out ${keyname}.key
 
 			# # Move the certificate into your MAMP apache configuration folder
-			# say_blue "Move the certificate into your MAMP apache configuration folder"
+			# say_blue 'Move the certificate into your MAMP apache configuration folder'
 			# mv ${keyname}.crt /Applications/MAMP/conf/apache
 			# mv ${keyname}.key /Applications/MAMP/conf/apache
 
-			# say_blue "Add to httpd-ssl"
+			# say_blue 'Add to httpd-ssl'
 			# addVhostSsl ${url} ${keyname}
 
-			# say_blue "Restart serv"
+			# say_blue 'Restart serv'
 			# servrestart
 		}
 

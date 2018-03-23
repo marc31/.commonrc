@@ -169,8 +169,6 @@
 		  done
 		}
 
-		ask_choice 'saulout les gros' e yes no
-
 		# 	check if provided folder name already exists
 		# 	no => create it
 		#	------------------------------------------------------------

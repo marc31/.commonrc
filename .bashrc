@@ -1,8 +1,10 @@
+#!/usr/bin/env bash
+
 source "${HOME}/.commonrc" 
 
 #   Change Prompt
 #   ------------------------------------------------------------
-    export PS1="\[\e[0;32m\]\n# \u@\h \[\e[1;33m\] \w\[\e[0m\]> "
+    export PS1="\\[\\e[0;32m\\]\\n# \\u@\\h \\[\\e[1;33m\\] \\w\\[\\e[0m\\]> "
     #n new ligne
     #u user name
     #h computer name

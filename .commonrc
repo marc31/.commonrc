@@ -133,11 +133,8 @@
 		#	------------------------------------------------------------
 		function ask_choice () {
 
-
 		  ## EASE OUR DEVS' LIFE
-		  if [[ $2 =~ ^-?[0-9]+$ ]]; then
-		   	echo ""
-		  else
+		  if ! [[ $2 =~ ^-?[0-9]+$ ]]; then
 			say_red "'$2' IS NOT AN INTEGER"
 			return 1;
 		  fi
@@ -171,6 +168,8 @@
 		    say_red "Please choose a valid answer"               ## USER MISTYPED: EMBARRASSMENT
 		  done
 		}
+
+		ask_choice 'saulout les gros' e yes no
 
 		# 	check if provided folder name already exists
 		# 	no => create it

@@ -26,7 +26,7 @@
 
 	#	Source private part
 	#   ------------------------------------------------------------
-		source "$HOME/.privaterc"
+		if [ -f "$HOME/.privaterc" ]; then source "$HOME/.privaterc"; fi
 
 
 	#   Set Paths
@@ -306,19 +306,19 @@
 	#   ---------------------------------------------------------
 	    extract () {
 	        if [ -f "$1" ] ; then
-	          case "$1" in
-	            *.tar.bz2)   tar xjf "$1"     ;;
+	          case $1 in
+	            *.tar.bz2)   tar xjf "$1"    ;;
 	            *.tar.gz)    tar xzf "$1"     ;;
 	            *.bz2)       bunzip2 "$1"     ;;
 	            *.rar)       unrar e "$1"     ;;
 	            *.gz)        gunzip "$1"      ;;
 	            *.tar)       tar xf "$1"      ;;
-	            *.tbz2)      tar xjf "$1"     ;;
+	            *.tbz2)      tar xjf "$1"    ;;
 	            *.tgz)       tar xzf "$1"     ;;
 	            *.zip)       unzip "$1"       ;;
 	            *.Z)         uncompress "$1"  ;;
 	            *.7z)        7z x "$1"        ;;
-	            *)     echo "$1 cannot be extracted via extract()" ;;
+	            *)     echo "'$1' cannot be extracted via extract" ;;
 	             esac
 	         else
 	             echo "'$1' is not a valid file"
@@ -662,11 +662,11 @@ EOT
 			# cd ~
 
 			# # generate a private key (will request a password twice)
-			# say_blue "generate a private key (will request a password twice)"
+			# say_blue 'generate a private key (will request a password twice)'
 			# openssl genrsa -des3 -out ${keyname}.key 2048
 
 			# # generate certificate signing request (same password as above)
-			# say_blue "generate certificate signing request (same password as above)"
+			# say_blue 'generate certificate signing request (same password as above)'
 			# openssl req -sha256 -new -key ${keyname}.key -out ${keyname}.csr -config <(
 			# cat <<-EOF
 			# [req]
@@ -698,23 +698,23 @@ EOT
 			# )
 
 			# # generate the certificate
-			# say_blue "generate the certificate"
+			# say_blue 'generate the certificate'
 			# openssl x509 -req -days 365 -in ${keyname}.csr -signkey ${keyname}.key -out ${keyname}.crt
 
 			# # remove the password from the server key
-			# say_blue "remove the password from the server key"
+			# say_blue 'remove the password from the server key'
 			# cp ${keyname}.key ${keyname}.tmp
 			# openssl rsa -in ${keyname}.tmp -out ${keyname}.key
 
 			# # Move the certificate into your MAMP apache configuration folder
-			# say_blue "Move the certificate into your MAMP apache configuration folder"
+			# say_blue 'Move the certificate into your MAMP apache configuration folder'
 			# mv ${keyname}.crt /Applications/MAMP/conf/apache
 			# mv ${keyname}.key /Applications/MAMP/conf/apache
 
-			# say_blue "Add to httpd-ssl"
+			# say_blue 'Add to httpd-ssl'
 			# addVhostSsl ${url} ${keyname}
 
-			# say_blue "Restart serv"
+			# say_blue 'Restart serv'
 			# servrestart
 		}
 
@@ -744,22 +744,22 @@ EOT
 
 	#   Check char in a file and remove it if exist
 	#   -------------------------
-	#   if ! grep -Fxq "MY_CHAR" MY_FILE; then
-	#		echo "Don't Exist; add it"
-	#		sudo echo "MY_CHAR" >> MY_FILE
+	#   if ! grep -Fxq 'MY_CHAR' MY_FILE; then
+	#		echo 'Dont Exist; add it'
+	#		sudo echo 'MY_CHAR' >> MY_FILE
 	#	else
-	#		echo "Exist; Remove It"
+	#		echo 'Exist; Remove It'
 	#		# remove line
-	#		grep -Fv "MY_CHAR" MY_FILE > delete.me
+	#		grep -Fv 'MY_CHAR' MY_FILE > delete.me
 	#		sudo mv -f delete.me MY_FILE
 	#	fi
 
 	#   Remove every file Or specific file in dir, sub, subdir
 	#   -----------------------------
-	#   find . -iname "*.bak" -type f -delete
+	#   find . -iname '*.bak' -type f -delete
 	#   -iname Case sensitive for insensitive use -iname
 	#   for test remove -delete
-	#   for all file "*.*"
+	#   for all file '*.*'
 	#    you can try find -iregex '.*\.\(jpg\|gif\|png\|jpeg\)$'
 	# 	find . -name '.AppleDouble' -type d -print -exec rm -rv {} +
 

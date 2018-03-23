@@ -730,22 +730,22 @@ EOT
 
 	#   Check char in a file and remove it if exist
 	#   -------------------------
-	#   if ! grep -Fxq "MY_CHAR" MY_FILE; then
-	#		echo "Don't Exist; add it"
-	#		sudo echo "MY_CHAR" >> MY_FILE
+	#   if ! grep -Fxq 'MY_CHAR' MY_FILE; then
+	#		echo 'Dont Exist; add it'
+	#		sudo echo 'MY_CHAR' >> MY_FILE
 	#	else
-	#		echo "Exist; Remove It"
+	#		echo 'Exist; Remove It'
 	#		# remove line
-	#		grep -Fv "MY_CHAR" MY_FILE > delete.me
+	#		grep -Fv 'MY_CHAR' MY_FILE > delete.me
 	#		sudo mv -f delete.me MY_FILE
 	#	fi
 
 	#   Remove every file Or specific file in dir, sub, subdir
 	#   -----------------------------
-	#   find . -iname "*.bak" -type f -delete
+	#   find . -iname '*.bak' -type f -delete
 	#   -iname Case sensitive for insensitive use -iname
 	#   for test remove -delete
-	#   for all file "*.*"
+	#   for all file '*.*'
 	#    you can try find -iregex '.*\.\(jpg\|gif\|png\|jpeg\)$'
 	# 	find . -name '.AppleDouble' -type d -print -exec rm -rv {} +
 

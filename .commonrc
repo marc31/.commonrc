@@ -157,7 +157,7 @@
 		  while true; do
 		    say_green "$msg"
 		    echo -ne "$prompt> "
-		    read ans
+		    read -r ans
 
 		    if [ -n "$ZSH_VERSION" ]; then
 		   		# assume Zsh

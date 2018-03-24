@@ -205,7 +205,22 @@
 		    	touch "$1"
 		  	fi
 		}
-		
+
+		#	Link your bashrc and profile to root
+		#	------------------------------------------------------------
+		function linkconftoroot () {
+			ask_choice "Do you want I link your config file to the root user ?" 0 no yes
+			# change to the home folder you want to link from
+			cd /home/$(logname)
+
+			# define a list of dot files to link
+			dotfiles=".profile .bashrc .bash_aliases .bash_logout .zshrc .commonrc .privaterc .nanorc .toprc .inputrc "
+
+			# link each existing file into the root user's home folder
+			for i in $dotfiles; do
+			  [ -f $i ] && sudo ln -sfv ~+/$i ~root/
+			done
+		}
 
 #   -----------------------------
 #   2. MAKE TERMINAL BETTER

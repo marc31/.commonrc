@@ -702,7 +702,13 @@ EOF
 				# Copy it to the server
 	    		ssh-copy-id -f -p "$serverport" -i "${HOME}/.ssh/${keytype}_$keyname.pub" "$userlogin@$server"
 			fi
-			
+
+			ask_choice "Do you want to hash your known_hosts file ? " 0 no yes
+			if [[ $BOTASK_ANSWER == 1 ]]; then
+				ssh-keygen -H -f "${HOME}/.ssh/known_hosts"
+				rm "${HOME}/.ssh/known_hosts.old"
+			fi
+
 		}
 
 

@@ -636,7 +636,7 @@ are used as DSA/ECDSA. It is generally considered to be the strongest mathematic
 Source : forest https://security.stackexchange.com/questions/178958
 EOF
 			ask_choice "Do you want to put it in a server ?" 0 rsa dsa ecdsa ed25519
-			say_grey $text
+			say_grey "$text"
     		if [[ $BOTASK_ANSWER == 0 ]]; then
     			keytype='rsa'
     		elif [[ $BOTASK_ANSWER == 1 ]]; then

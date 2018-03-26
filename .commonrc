@@ -177,7 +177,7 @@
 		      		c=${choices[$i]}
 			      	if [[ "${ans}" == "${c:0:1}" ]]; then
 				        echo
-				        BOTASK_ANSWER=$(($i-1)) && return 0      #XXX: set -e SO RETURN 0
+				        BOTASK_ANSWER=$((i-1)) && return 0      #XXX: set -e SO RETURN 0
 				    fi
 		    	done
 			elif [ -n "$BASH_VERSION" ]; then
@@ -222,7 +222,7 @@
 		function linkconftoroot () {
 			ask_choice "Do you want I link your config file to the root user ?" 0 no yes
 			# change to the home folder you want to link from
-			cd /home/$(logname)
+			cd "/home/$(logname)" || return 1
 
 			# define a list of dot files to link
 			dotfiles=".profile .bashrc .bash_aliases .bash_logout .zshrc .commonrc .privaterc .nanorc .toprc .inputrc "
@@ -315,7 +315,7 @@
 		    [[ ${x2:0:1} == '~' ]] && x2="${HOME}${x2:1}"
 		    if [[ "${x2}" == "${the_new_dir}" ]]; then
 		      popd -n +$cnt 2>/dev/null 1>/dev/null
-		      cnt=cnt-1
+		      cnt=$((cnt-1))
 		    fi
 		  done
 
@@ -611,44 +611,96 @@ EOT
 			local server=''
 			local serverport=''
 			local userlogin=''
+			local keyname=''
+			local keytype=''
+			local keystrength=''
 
-			echo "What's the name of the Key (no spaced please) ? "
-			read -r name
+			while [ -z "$keyname" ] && say_green "What is the key name ?" && read -r keyname && [ -z "$keyname" ] ; do
+      			say_red "No-no, please, no blank user!"
+    		done
 
-			echo "What's the email associated with it? "
-			read -r email
+			read -r -d '' text <<"EOF"
+\t- RSA is well-regarded and supported everywhere. It is considered quite secure.
+Common key sizes go up to 4096 bits and as low as 1024. The key size is adjustable.
+You should choose RSA.
+\t- DSA is not in common use anymore, as poor randomness when generating a signature
+can leak the private key. In the past, it was guaranteed to work everywhere as per RFC 4251,
+but this is no longer the case. DSA has been standardized as being only 1024 bits
+(in FIPS 186-2, though FIPS 186-3 has increased that limit). OpenSSH 7.0 and newer
+actually disable this algorithm.
+\t- ECDSA is newer and is based on DSA. It has the same weaknesses as DSA, but it is generally
+thought to be more secure, even at smaller key sizes. It uses the NIST curves (P256).
+Ed25519, while not one you listed, is available on newer OpenSSH installations. It is similar
+to ECDSA but uses a superior curve, and it does not have the same weaknesses when weak RNGs
+are used as DSA/ECDSA. It is generally considered to be the strongest mathematically.
+Source : forest https://security.stackexchange.com/questions/178958
+EOF
+			ask_choice "Do you want to put it in a server ?" 0 rsa dsa ecdsa ed25519
+			say_grey $text
+    		if [[ $BOTASK_ANSWER == 0 ]]; then
+    			keytype='rsa'
+    		elif [[ $BOTASK_ANSWER == 1 ]]; then
+    			keytype='dsa'
+    		elif [[ $BOTASK_ANSWER == 2 ]]; then
+    			keytype='ecdsa'
+    		elif [[ $BOTASK_ANSWER == 3 ]]; then
+    			keytype='ed25519'
+    		fi
 
-			# Generate
-			ssh-keygen -t ed25519 -f "${HOME}/.ssh/ed25519_$name" -C "$email"
+			if ! [ -z "$keystrength" ] && [[ $keystrength =~ ^[0-9]+$ ]]; then
+				# Generate
+				ssh-keygen -t $keytype -b $keystrength -f "$HOME/.ssh/${keytype}_$keyname"
+			else
+				say_green "What key strength do you want ? (let's default value from open ssh)"
+				read -r keystrength
+
+				if ! [ -z "$keystrength" ] && [[ $keystrength =~ ^[0-9]+$ ]]; then
+					# Generate
+					ssh-keygen -t $keytype -b "$keystrength" -f "$HOME/.ssh/${keytype}_$keyname"
+				else
+					# Generate without strenght
+					ssh-keygen -t $keytype -f "$HOME/.ssh/${keytype}_$keyname"
+				fi
+			fi
 
 			# Add it to the agent
-			ssh-add -K "${HOME}/.ssh/ed25519_$name"
+			ask_choice "Do you want to add the key to agent ?" 1 no yes
+			if [[ $BOTASK_ANSWER == 1 ]]; then
+				ssh-add -K "${HOME}/.ssh/${keytype}_$keyname"
+			fi
 
-			#pbcopy < "${HOME}/.ssh/ed25519_$name.pub"
-			#echo "SSH Key copied in your clipboard";
+			ask_choice "Do you want to copy the key to clipboard ?" 0 no yes
+			if [[ $BOTASK_ANSWER == 1 ]]; then
+				pbcopy < "${HOME}/.ssh/${keytype}_$keyname"
+				say_blue "SSH Key copied in your clipboard"
+			fi
+
 
 			ask_choice "Do you want to put it in a server ?" 1 no yes
 			if [[ $BOTASK_ANSWER == 1 ]]; then
 
-				while [ -z "$userlogin" ] && say_grey "What is the user login ?" && read -r userlogin && [ -z "$userlogin" ] ; do
+				while [ -z "$userlogin" ] && say_green "What is the user login ?" && read -r userlogin && [ -z "$userlogin" ] ; do
 	      			say_red "No-no, please, no blank user!"
 	    		done
 
-				while [ -z "$server" ] && say_grey "What is the url/ip of the server ?" && read -r server && [ -z "$server" ] ; do
+				while [ -z "$server" ] && say_green "What is the url/ip of the server ?" && read -r server && [ -z "$server" ] ; do
 	      			say_red "No-no, please, no blank server!"
 	    		done
 
-	    		while [ -z "$serverport" ] && say_grey "What is the port of the server (default 22) ?" && read -r serverport && [ -z "$serverport" ] ; do
+	    		while [ -z "$serverport" ] && say_green "What is the port of the server (default 22) ?" && read -r serverport && [ -z "$serverport" ] ; do
 	      			say_red "No-no, please, no blank server!"
 	    		done
 
 	    		# Add it to config file for mac os instead it ask for password every reboot
-				printf '\n' | tee -a "${HOME}/.ssh/config"
-				echo "Host $server" | tee -a "${HOME}/.ssh/config"
-				echo -e "\t IdentityFile ${HOME}/.ssh/ed25519_$name" | tee -a "${HOME}/.ssh/config"
+	    		ask_choice "Do you want to add the key to ~/.ssh/config ?" 1 no yes
+				if [[ $BOTASK_ANSWER == 1 ]]; then
+					printf '\n' | tee -a "${HOME}/.ssh/config"
+					echo "Host $server" | tee -a "${HOME}/.ssh/config"
+					echo -e "\\t IdentityFile ${HOME}/.ssh/${keytype}_$keyname" | tee -a "${HOME}/.ssh/config"
+				fi
 
 				# Copy it to the server
-	    		ssh-copy-id -p "$serverport" -i "${HOME}/.ssh/ed25519_$name.pub" "$userlogin@$server"
+	    		ssh-copy-id -f -p "$serverport" -i "${HOME}/.ssh/${keytype}_$keyname.pub" "$userlogin@$server"
 			fi
 			
 		}
@@ -849,6 +901,11 @@ EOT
 
 
 	# 	Copy to clipboard 
+	#	https://serverfault.com/questions/72476
+	#	Dennis Williamson and Wilfred Hughes
 	#   -------------------------
-	#   pbcopy < MYFILE
-	#   echo "salut" | pbcopy
+	# 	Putting quotes around the sentinel (EOF) prevents the text from undergoing parameter expansion.
+	#	The -d'' causes it to read multiple lines (ignore newlines).
+	#	read -d '' String <<"EOF"
+	#	my test
+	#	EOF

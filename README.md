@@ -1,7 +1,13 @@
 # bashrc
-Here is my bashrc with lot of helpers function
 
-All my function are in commonrc because I often switch between bash and zsh.
-In both .bashrc and .zshrc I source the commonrc file.
+Here you can find some tools for bash. 
 
-Hope it can help someone.
+To install it just 
+```
+cd ~
+git clone https://github.com/marc31/.commonrc.git
+cd .commonrc
+./install.sh
+```
+
+This will source it in your .bashrc and .zshrc

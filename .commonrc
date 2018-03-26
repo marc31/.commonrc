@@ -26,7 +26,7 @@
 
 	#	Source private part
 	#   ------------------------------------------------------------
-		if [ -f "$HOME/.privaterc" ]; then source "$HOME/.privaterc"; fi
+		if [ -f "$HOME/.commonrc/.privaterc" ]; then source "$HOME/.commonrc/.privaterc"; fi
 
 
 	#   Set Paths
@@ -225,7 +225,7 @@
 			cd "/home/$(logname)" || return 1
 
 			# define a list of dot files to link
-			dotfiles=".profile .bashrc .bash_aliases .bash_logout .zshrc .commonrc .privaterc .nanorc .toprc .inputrc "
+			dotfiles=".profile .bashrc .bash_aliases .bash_logout .zshrc .commonrc/.commonrc .commonrc/.privaterc .nanorc .toprc .inputrc "
 
 			# link each existing file into the root user's home folder
 			for i in $dotfiles; do
@@ -576,13 +576,13 @@ EOT
 #   -------------------------------
 #   10. EDITING FILES
 #   -------------------------------
-	alias commonrc="source ~/.commonrc"
-	alias commonrcm='${EDITORGUI} ~/.commonrc'
-	alias privatercm='${EDITORGUI} ~/.privaterc'
-	alias bashs="source ~/.bashrc"
-	alias bashm='${EDITORGUI} ~/.bashrc'
-	alias zhss="source ~/.zshrc"
-	alias zhsm='${EDITORGUI} ~/.zshrc'
+	alias commonrc='source ${HOME}/.commonrc/.commonrc'
+	alias commonrcm='${EDITORGUI} ${HOME}/.commonrc/.commonrc'
+	alias privatercm='${EDITORGUI} ${HOME}/.commonrc/.privaterc'
+	alias bashrc='source ${HOME}/.bashrc'
+	alias bashrcm='${EDITORGUI} ${HOME}/.bashrc'
+	alias zhsrc='source ${HOME}/.zshrc'
+	alias zhsrcm='${EDITORGUI} ${HOME}/.zshrc'
 
 #   -------------------------------
 #   11. Function

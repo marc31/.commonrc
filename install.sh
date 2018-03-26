@@ -14,6 +14,7 @@ if [ -f "$HOME/.bashrc" ]; then
 		printf '\n' | tee -a "$HOME/.bashrc"
 		echo "Add source of commonrc in bashrc"
 	fi
+	source "$HOME/.bashrc"
 fi
 
 # Source commonrc in zshrc
@@ -26,4 +27,5 @@ if [ -f "$HOME/.zshrc" ]; then
 		printf '\n' | tee -a "$HOME/.zshrc"
 		echo "Add source of commonrc in zshrc"
 	fi
+	source "$HOME/.zshrc"
 fi

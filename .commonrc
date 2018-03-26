@@ -581,8 +581,8 @@ EOT
 	alias privatercm='${EDITORGUI} ${HOME}/.commonrc/.privaterc'
 	alias bashrc='source ${HOME}/.bashrc'
 	alias bashrcm='${EDITORGUI} ${HOME}/.bashrc'
-	alias zhsrc='source ${HOME}/.zshrc'
-	alias zhsrcm='${EDITORGUI} ${HOME}/.zshrc'
+	alias zshrc='source ${HOME}/.zshrc'
+	alias zshrcm='${EDITORGUI} ${HOME}/.zshrc'
 
 #   -------------------------------
 #   11. Function

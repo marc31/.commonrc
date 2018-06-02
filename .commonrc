@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #  ---------------------------------------------------------------------------
-#  https://github.com/marc31/bashrc.git
+#  https://github.com/marc31/.commonrc
 #
 #  Description:  This file holds is source both by .bashrc and .zshrc
 #                I use it for commun things
@@ -596,6 +596,49 @@ alias chromefix="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --
 alias chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 alias druppy="/Users/narcozy/Documents/bricolage/web/script/drupal/./druppy"
+
+
+
+# Make a github repo
+# replace USER and REPO with real values
+# but *not* the "/user/" in the GitHub URL
+function makeGitHub() {
+	gituser=marc31
+	repo=''
+	remotename='origin'
+
+	while [ -z "$repo" ] && say_green "What is the repo name ?" && read -r repo && [ -z "$repo" ]; do
+		say_red "No-no, please, no blank repo name!"
+	done
+
+	# Check if repo exist
+	if (git ls-remote "https://github.com/$gituser/$repo" -q); then
+		say_red "Le repo $repo existe sur gitHub"
+		return 1
+	fi
+
+	# Check if the actual dir have a .git dir
+	if [ ! -d ".git" ]; then
+		say_red "Git n'est pas initialisé dans le repertoire actuel"
+		say_blue "Initialise le dépot"
+		git init
+	fi
+
+	say_blue "Créer le dépot sur github"
+	curl -u $gituser https://api.github.com/user/repos -d "{\"name\":\"$repo\"}"
+
+	if ( git remote -v | grep $remotename -q); then
+		
+		say_red "La branche origin existe deja"
+
+		while [ -z "$remotename" ] && say_green "What is the remote name?" && read -r remotename && [ -z "$remotename" ]; do
+			say_red "No-no, please, no blank repo name!"
+		done
+	fi
+	say_blue "Ajoute github comme remote avec le nom : $remotename"
+	git remote add $remotename https://github.com/$gituser/"$repo".git
+	say_blue "Il ne vous reste plus qu'à add, commit, push"
+}
 
 #   -------------------------------
 #   10. EDITING FILES

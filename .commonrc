@@ -23,19 +23,23 @@
 #   -------------------------------
 #   1. ENVIRONMENT CONFIGURATION
 #   -------------------------------
+MKPATH="$MKPATH:$HOME/Documents/web/script/freshdrup"
+MKPATH="$MKPATH:/Applications/MAMP/Library/bin"
+MKPATH="$MKPATH:$HOME/.composer/vendor/bin"
+MKPATH="$MKPATH:/Applications/MAMP/bin/php/php5.6.32/bin"
+MKPATH="$MKPATH:$HOME/.yarn/bin"
+MKPATH="$MKPATH:/Library/Frameworks/Python.framework/Versions/2.7/bin"
+MKPATH="$MKPATH:$HOME/.SpaceVim/bin"
+MKPATH="$MKPATH:/Applications/MacVim.app/Contents/bin"
+MKPATH="$MKPATH:/usr/local/bin/:/usr/local/sbin/"
+MKPATH="$MKPATH:$PATH"
+PATH=$MKPATH
+export PATH
+
 
 
 #   Set Paths
 #   ------------------------------------------------------------
-PATH="$PATH:/usr/local/bin/:$HOME/Documents/web/script/freshdrup"
-PATH="$PATH:/Applications/MAMP/Library/bin:$HOME/.composer/vendor/bin"
-PATH="$PATH:/Applications/MAMP/bin/php/php7.0.12/bin"
-PATH="$PATH:$HOME/.yarn/bin"
-PATH="$PATH:/Library/Frameworks/Python.framework/Versions/2.7/bin"
-PATH="$PATH:$HOME/.SpaceVim/bin"
-PATH="$PATH:/Applications/MacVim.app/Contents/bin"
-export PATH
-
 export DEFAULT_USER=$(whoami)
 
 #	Source private part
@@ -508,8 +512,10 @@ alias cleanupLS="/System/Library/Frameworks/CoreServices.framework/Frameworks/La
 #   ---------------------------------------
 hostsfile='/etc/hosts'
 alias hosts='sudo ${EDITORGUI} ${hostsfile}'
+alias hostsv='sudo ${EDITOR} ${hostsfile}'
 vhostsfile='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf'
 alias vhosts='sudo ${EDITORGUI} ${vhostsfile}'
+alias vhostsv='sudo ${EDITOR} ${vhostsfile}'
 vhostssslfile='/Applications/MAMP/conf/apache/extra/httpd-ssl.conf'
 alias vhostsssl='sudo ${EDITORGUI} ${vhostssslfile}'
 
@@ -584,10 +590,12 @@ alias drupalcsbest="phpcs --colors --standard=DrupalPractice --extensions='php,m
 alias drupalcsfix="phpcbf --colors --standard=Drupal --extensions='php,module,inc,install,test,profile,theme,js,css,info,txt'"
 alias drupalcsbestfix="phpcbf --colors --standard=DrupalPractice --extensions='php,module,inc,install,test,profile,theme,js,css,info,txt'"
 
-alias imexdb="~/Documents/web/script/im_ex/./im_ex" # Export Db drupal
+alias imexdb="~/Documents/bricolage/web/script/drupal/./im_ex" # Export Db drupal
 
 alias chromefix="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --disable-web-security --user-data-dir=/Users/narcozy/tmp"
 alias chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+
+alias druppy="/Users/narcozy/Documents/bricolage/web/script/drupal/./druppy"
 
 #   -------------------------------
 #   10. EDITING FILES
@@ -931,3 +939,7 @@ function mampSSL() {
 #	* `new_gh` - Initializes an existing directory as a repo and pushes it to GitHub
 #	* `exist_gh` - Takes an existing repo and pushes it to GitHub
 #	* `git.io` - Shortens a URL using [git.io](http://git.io)
+
+#   Write path to beggin of each line in a file
+#   ---------------------------------
+#   sed -i'' -e "s|^|$path|" update.txt

@@ -24,6 +24,7 @@
 #   1. ENVIRONMENT CONFIGURATION
 #   -------------------------------
 
+
 #   Set Paths
 #   ------------------------------------------------------------
 PATH="$PATH:/usr/local/bin/:$HOME/Documents/web/script/freshdrup"
@@ -526,6 +527,7 @@ httpDebug() {
 wwwdir=/Applications/MAMP/htdocs
 alias cdroot='cd ${wwwdir}'
 alias cdscript='cd ${HOME}/Documents/bricolage/web/script'
+alias cdnote='cd ${HOME}/Documents/Nextcloud/Notes'
 
 #	Apache
 #   -----------------------------------------------------------------------------------

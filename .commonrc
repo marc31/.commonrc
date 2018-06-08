@@ -555,6 +555,7 @@ alias mysqlrestart="mysqlstop ; mysqlstart"
 export mamplog="/Applications/MAMP/logs & /Applications/MAMP/Library/logs"
 export apachelog="/Applications/MAMP/logs/apache_error.log"
 export mysqllog="/Applications/MAMP/logs/mysql_error_log.err"
+export phplog="/Applications/MAMP/logs/php_error.log"
 
 # 	Start/stop mysql and apache
 #   -----------------------------------------------------------------------------------
@@ -576,7 +577,7 @@ servrestart() {
 }
 
 servlog() {
-	tail -f ${apachelog} ${mysqllog}
+	tail -f ${apachelog} ${mysqllog} ${phplog}
 }
 
 # 	Start php serv

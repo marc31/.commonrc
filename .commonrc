@@ -25,10 +25,10 @@
 #   -------------------------------
 MKPATH="$MKPATH:$HOME/Documents/web/script/freshdrup"
 MKPATH="$MKPATH:/Applications/MAMP/Library/bin"
-MKPATH="$MKPATH:$HOME/.composer/vendor/bin"
-MKPATH="$MKPATH:/Applications/MAMP/bin/php/php5.6.32/bin"
-MKPATH="$MKPATH:$HOME/.yarn/bin"
+MKPATH="$MKPATH:/Applications/MAMP/bin/php/php7.2.1/bin"
 MKPATH="$MKPATH:/Library/Frameworks/Python.framework/Versions/2.7/bin"
+MKPATH="$MKPATH:$HOME/.composer/vendor/bin"
+MKPATH="$MKPATH:$HOME/.yarn/bin"
 MKPATH="$MKPATH:$HOME/.SpaceVim/bin"
 MKPATH="$MKPATH:/Applications/MacVim.app/Contents/bin"
 MKPATH="$MKPATH:/usr/local/bin/:/usr/local/sbin/"
@@ -36,7 +36,8 @@ MKPATH="$MKPATH:$PATH"
 PATH=$MKPATH
 export PATH
 
-
+JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_HOME
 
 #   Set Paths
 #   ------------------------------------------------------------
@@ -362,6 +363,49 @@ trash() { command mv "$@" ~/.Trash; }                  # trash:        Moves a f
 ql() { qlmanage -p "$*" >&/dev/null; }                 # ql:           Opens any file in MacOS Quicklook Preview
 spotlight() { mdfind "kMDItemDisplayName == '$*'wc"; } # Search for a file using MacOS Spotlight's metadata
 
+# Copy actual path to clipboard
+pwdc() {
+	pwd | pbcopy
+}
+
+# Stop, start, restart chunkwm and skhd service
+# is a tiling window manager for mac os
+i3like() {
+	case $1 in
+		1|O|o|Y|y|start)
+			echo "activate"
+			brew services start chunkwm
+			brew services start skhd
+			echo "end activate"
+			;;
+		0|n|N|stop)
+			echo "desactivate"
+			brew services stop chunkwm
+			brew services stop skhd
+			echo "end desactivate"
+			;;
+		restart)
+			echo "restart"
+			brew services restart chunkwm
+			brew services restart skhd
+			echo "end restart"
+			;;
+		up|update|upgrade)
+			echo "upgrade"
+			brew services stop chunkwm
+			brew services stop skhd
+			brew upgrade chunkwm
+			brew upgrade skhd
+			brew services restart chunkwm
+			brew services restart skhd
+			echo "end upgrade"
+			;;
+		*)	
+			echo "You must say 1|O|o|Y|y|start|s or 0|n|N|stop or restart or up|update|upgrade)"
+			;;
+	esac
+}
+
 #   -------------------------------
 #   4. FILE AND FOLDER MANAGEMENT
 #   -------------------------------
@@ -598,7 +642,42 @@ alias chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 alias druppy="/Users/narcozy/Documents/bricolage/web/script/drupal/./druppy"
 
+#	GIT
+#   -----------------------------------------------------------------------------------
 
+
+# Better git
+function bgit() {
+	case "$1" in
+		log) git log --branches --remotes --tags --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+			;;
+		logdiff) git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' -p
+			;;
+		github) makeGitHub
+			;;
+
+
+	# git log --branches --remotes --tags --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	# git log --branches --remotes --tags --graph --oneline --decorate
+    # -n) name="$2"; shift 2;;
+    # -p) pidfile="$2"; shift 2;;
+    # -l) logfile="$2"; shift 2;;
+
+    # --name=*) name="${1#*=}"; shift 1;;
+    # --pidfile=*) pidfile="${1#*=}"; shift 1;;
+    # --logfile=*) logfile="${1#*=}"; shift 1;;
+    # --name|--pidfile|--logfile) echo "$1 requires an argument" >&2; exit 1;;
+
+    	*) echo "unknown option: $1
+		Know option are : 
+		log : for a better log
+		logdiff : for log with diff
+		github : for making a depot on github
+		" >&2; return 1;;
+	esac
+
+
+}
 
 # Make a github repo
 # replace USER and REPO with real values
@@ -652,6 +731,8 @@ alias bashrcm='${EDITORGUI} ${HOME}/.bashrc'
 alias zshrc='source ${HOME}/.zshrc'
 alias zshrcm='${EDITORGUI} ${HOME}/.zshrc'
 
+alias e="emacsclient -t"
+alias es="emacs --daemon"
 #   -------------------------------
 #   11. Function
 #   -------------------------------
@@ -686,7 +767,8 @@ function sshKeyGen() {
 		say_red "No-no, please, no blank user!"
 	done
 
-	read -r -d '' text <<"EOF"
+	read -r -d '' text <<EOF
+${red}${bold}
 \t- RSA is well-regarded and supported everywhere. It is considered quite secure.
 Common key sizes go up to 4096 bits and as low as 1024. The key size is adjustable.
 You should choose RSA.
@@ -701,6 +783,7 @@ Ed25519, while not one you listed, is available on newer OpenSSH installations. 
 to ECDSA but uses a superior curve, and it does not have the same weaknesses when weak RNGs
 are used as DSA/ECDSA. It is generally considered to be the strongest mathematically.
 Source : forest https://security.stackexchange.com/questions/178958
+${normal}
 EOF
 	ask_choice "Do you want to put it in a server ?" 0 rsa dsa ecdsa ed25519
 	say_grey "$text"
@@ -766,7 +849,7 @@ EOF
 		fi
 
 		# Copy it to the server
-		ssh-copy-id -f -p "$serverport" -i "${HOME}/.ssh/${keytype}_$keyname.pub" "$userlogin@$server"
+		ssh-copy-id -p "$serverport" -i "${HOME}/.ssh/${keytype}_$keyname.pub" "$userlogin@$server"
 	fi
 
 	ask_choice "Do you want to hash your known_hosts file ? " 0 no yes
@@ -963,8 +1046,8 @@ function mampSSL() {
 
 # 	Get path of this file
 # 	--------------------------
-# 	path_of_this_file=`dirname "$0"`
-# 	path_of_this_file=`( cd "${path_of_this_file}" && pwd )`
+# 	path_of_this_file=$(dirname "$0")
+# 	path_of_this_file=$( cd "${path_of_this_file}" && pwd )
 
 # 	Copy to clipboard
 #	https://serverfault.com/questions/72476
@@ -987,3 +1070,24 @@ function mampSSL() {
 #   Write path to beggin of each line in a file
 #   ---------------------------------
 #   sed -i'' -e "s|^|$path|" update.txt
+
+#   SSH lunch script
+#   ---------------------------------
+#   For a script that requires sudo, run ssh root@MachineB 'echo "rootpass" | sudo -Sv && bash -s' < local_script.sh
+#   ssh root@MachineB 'bash -s' < local_script.sh
+#   Not test
+#   ssh user@host <<-'ENDSSH'
+#   	#commands to run on remote host
+#   	ssh user@host2 <<-'END2'
+#   		# Another bunch of commands on another host
+#   		wall <<-'ENDWALL'
+#   			Error: Out of cheese
+#   		ENDWALL
+#   		ftp ftp.secureftp-test.com <<-'ENDFTP'
+#   			test
+#   			test
+#   			ls
+#   		ENDFTP
+#   	END2
+#   ENDSSH
+#   Pseudo-terminal will not be allocated because stdin is not a terminal. message. One has to use ssh with -t -t 
